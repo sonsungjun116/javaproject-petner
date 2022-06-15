@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opns">
+
+	<!-- insert -->
+	<insert id="insert" parameterType="payment">
+		insert into order_product values ( orderproduct_no_seq.nextval, #{payment_no},
+		#{product_no}, #{product_name}, #{product_ea}, 0, #{mem_id}, '입금완료', '' )
+	</insert>
+	
+	<!-- product_price, order_state, product_img 입력 -->
+ 	<update id="update" parameterType="order_product">
+		update order_product set product_price=#{product_price}, order_state=#{order_state},
+		product_img=#{product_img} where payment_no=#{payment_no}
+	</update>
+	
+	<!-- 주문상태 변경 -->
+  	<update id="change" parameterType="order_product">
+		update order_product set order_state=#{order_state}
+		where payment_no=#{payment_no}
+	</update>
+
+	<!-- 목록(order_complete) -->
+ 	<select id="product_info" parameterType="payment" resultType="order_product">
+		select * from order_product where payment_no=#{payment_no}
+	</select>
+	
+	<!-- 목록2(order_list)-->
+	<select id="list2" parameterType="String" resultType="order_product">
+		select * from order_product where mem_id=#{mem_id}
+	</select>
+	
+	<!-- 상세(DTO, order_view) -->
+  	<select id="getOrder_product" parameterType="int" resultType="order_product">
+		select * from order_product where payment_no=#{payment_no}
+	</select>
+	
+	<!-- 상세(List, order_view) -->
+ 	<select id="getOrder_productDetail" parameterType="order_product" resultType="order_product">
+		select * from order_product where payment_no=#{payment_no}
+	</select>
+	
+	<!-- 재고량 -1, 판매량 +1 -->
+ 	<update id="stocksell_update" parameterType="order_product">
+        update product set product_stock=product_stock-#{order_ea},
+        product_sale=product_sale+#{order_ea}
+        where product_no=#{product_no}
+    </update>
+    
+    <!-- 결제단계 변경 -->
+	<update id="step_update" parameterType="int">
+        update payment set payment_step = '입금완료' where payment_no=#{payment_no}
+    </update>
+    
+    <!-- 총 데이터 개수 -->
+    <select id="getTotal" parameterType="order_product" resultType="int">
+		select count(*) from order_product
+	</select>
+	
+	<!-- seller_no로 product List 불러오기 -->
+  	<select id="getProductList" parameterType="int" resultType="product">
+		select * from product where seller_no=#{seller_no}
+	</select>
+	
+	<!-- seller_no로 payment List 불러오기 -->
+  	<select id="getPaymentList" parameterType="int" resultType="payment">
+		select pay.payment_no, pay.payment_regdate, pay.order_no, pay.mem_id,
+		pay.mem_post, pay.mem_addr1, pay.mem_addr2, pay.payment_price,
+		pay.payment_step, pay.payment_canceldate, pay.product_no,
+		pay.product_name, pay.seller_no, op.order_state
+		from payment pay, order_product op
+		where seller_no=#{seller_no} and pay.payment_no=op.payment_no
+	</select>
+	
+	<!-- order List -->
+	<select id="getOrderList" parameterType="payment" resultType="payment">
+		select pay.payment_no, pay.payment_regdate, pay.order_no, pay.mem_id,
+		pay.mem_post, pay.mem_addr1, pay.mem_addr2, pay.payment_price,
+		pay.payment_step, pay.payment_canceldate, pay.product_no,
+		pay.product_name, pay.seller_no, op.order_state
+		from payment pay, order_product op
+		where pay.mem_id=#{mem_id} and pay.payment_no=op.payment_no
+	</select>
+	
+	<select id="getDelivery_info" parameterType="int" resultType="member">
+		select * from member where payment_no=#{payment_no} 
+	</select>
+	
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productns">
+	
+	<select id="list" parameterType="product" resultType="product">
+		select * from (select rownum rn, pro.* from (select * from product
+		<where>
+			<if test="keyword != null">
+				${search} like '%'||#{keyword}||'%' and product_del='n'
+			</if>
+			<if test="keyword == null">
+				product_del='n'
+			</if>
+		</where>
+		order by product_no desc) pro) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="mylist" parameterType="product" resultType="product">
+		select * from (select rownum rn, pro.* from (select * from product
+		<where>
+			<if test="keyword != null">
+				${search} like '%'||#{keyword}||'%' and seller_no=#{seller_no} and product_del='n'
+			</if>
+			<if test="keyword == null">
+				seller_no=#{seller_no} and product_del='n'
+			</if>
+		</where>
+		order by product_no desc) pro) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getTotal" parameterType="product" resultType="int">
+		select count(*) from product 
+		<where>
+			<if test="keyword != null">
+				${search} like '%'||#{keyword}||'%' and product_del='n'
+			</if>
+			<if test="keyword == null">
+				product_del='n'
+			</if>
+		</where>
+	</select>
+	
+	<select id="getMytotal" parameterType="product" resultType="int">
+		select count(*) from product
+		<where>
+			<if test="keyword != null">
+				${search} like '%'||#{keyword}||'%' and seller_no=#{seller_no} and product_del='n'
+			</if>
+			<if test="keyword == null">
+				seller_no=#{seller_no} and product_del='n'
+			</if>
+		</where>
+	</select>
+	
+	<select id="getSeller" parameterType="int" resultType="seller">
+		select * from seller where seller_no=#{seller_no}
+	</select>
+	
+	<select id="getProduct" parameterType="int" resultType="product">
+		select * from product where product_no=#{product_no}
+	</select>
+	
+	<update id="getEa" parameterType="product">
+		update product set product_ea=#{product_ea} where product_no=#{product_no}
+	</update>
+	
+	<insert id="insert" parameterType="product">
+		insert into product values (product_no_seq.nextval, #{seller_no}, #{product_name}, #{product_stock}, #{product_content}, 
+			#{product_img}, #{product_price}, 0, 'n', 1, #{product_pet}, #{product_category}, 0, #{product_make}, #{product_contentimg})
+	</insert>
+	
+	<update id="update" parameterType="product">
+		update product set product_name=#{product_name}, product_stock=#{product_stock}, product_content=#{product_content}, 
+		product_img=#{product_img}, product_price=#{product_price}, product_pet=#{product_pet}, product_category=#{product_category}, 
+		product_make=#{product_make}, product_contentimg=#{product_contentimg} where product_no=#{product_no}
+	</update>
+	
+	<update id="delete" parameterType="int">
+		update product set product_del='y' where product_no=#{product_no}
+	</update>
+
+</mapper>

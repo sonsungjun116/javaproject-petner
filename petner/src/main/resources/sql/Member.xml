@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberns">
+   
+   <insert id="Sign_up" parameterType="member">
+      insert into member values(#{mem_id},#{mem_pwd},#{mem_post},#{mem_addr1},
+         #{mem_addr2},#{mem_name},#{mem_birth},#{mem_email},#{mem_domain},#{mem_phone1},
+         #{mem_phone2},#{mem_phone3},#{mem_gender},sysdate,#{mem_profile, jdbcType=VARCHAR},'일반회원','no','n',0,'일반',0)
+   </insert>
+   
+   <select id="mem_idcheck" parameterType="String" resultType="member">
+      select * from member where mem_id=#{mem_id} and mem_del='n'
+   </select>
+   
+   <update id="mem_update" parameterType="member">
+      update member set mem_phone1=#{mem_phone1}, mem_phone2=#{mem_phone2}, mem_phone3=#{mem_phone3},
+                    mem_post=#{mem_post}, mem_addr1=#{mem_addr1}, mem_addr2=#{mem_addr2}, mem_email=#{mem_email}, mem_domain=#{mem_domain},
+                    mem_profile=#{mem_profile, jdbcType=VARCHAR} where mem_id=#{mem_id}
+   </update>
+   
+   <update id="mem_delete" parameterType="String">
+      update member set mem_del='y' where mem_id=#{mem_id}
+   </update>
+   
+   <select id="getSeller_no" parameterType="String" resultType="seller">
+       select * from seller where mem_id = #{mem_id} 
+   </select>
+   
+   <update id="update_mem" parameterType="String">
+      update member set mem_type='사업자' where mem_id = #{mem_id}
+   </update>
+</mapper>

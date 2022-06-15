@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qnans">
+
+	<!-- 문의글 목록 -->
+	<select id="list" parameterType="qna" resultType="qna">
+		select * from (select qnaBoard.*, rownum rnum from (
+		select * from qna
+		<where>
+			<if test="keyword != null and search != 'subcon'">
+				${search} like '%'||#{keyword}||'%'
+			</if>
+			<if test="keyword != null and search == 'subcon'">
+				qna_title like '%'||#{keyword}||'%' or
+				qna_content like '%'||#{keyword}||'%'								
+			</if>
+		</where>
+		order by qna_ref desc, qna_seq asc ) qnaBoard )
+		where rnum between #{startRow} and #{endRow}
+	</select>
+
+	<!-- 데이터 총 개수 구하기 -->
+	<select id="getTotal" parameterType="qna" resultType="int">
+		select count(*) from qna
+		<where>
+			<if test="keyword != null and search != 'subcon'">
+				${search} like '%'||#{keyword}||'%'
+			</if>
+			<if test="keyword != null and search == 'subcon'">
+				qna_title like '%'||#{keyword}||'%' or
+				qna_content like '%'||#{keyword}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 조회수 1 증가 -->
+	<update id="hit" parameterType="int">
+		update qna set qna_readcount = qna_readcount+1 where qna_no=#{qna_no}
+	</update>
+
+	<!-- 문의글 등록 -->
+	<insert id="insert" parameterType="qna">
+		insert into qna values ( qna_no_seq.nextval, #{qna_title},
+		#{product_no}, #{mem_id}, 0, sysdate, #{qna_content},
+		#{qna_file, jdbcType=VARCHAR}, #{qna_secret}, qna_no_seq.nextval,
+		0, 0, #{qna_category}, '답변대기', #{qna_pwd} )
+	</insert>
+
+	<!-- 상세정보 구하기 -->
+	<select id="select" parameterType="int" resultType="qna">
+		select * from qna where qna_no=#{qna_no}
+	</select>
+
+	<!-- 문의글 수정 -->
+	<update id="update" parameterType="qna">
+		update qna set qna_title=#{qna_title}, qna_content=#{qna_content},
+		qna_file=#{qna_file, jdbcType=VARCHAR}, qna_secret=#{qna_secret},
+		qna_reg=sysdate, qna_category=#{qna_category, jdbcType=VARCHAR} where qna_no=#{qna_no}
+	</update>
+
+	<!-- 문의글 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from qna where qna_no=#{qna_no} or qna_ref=#{qna_no}
+	</delete>
+
+	<!-- 문의글 답변 -->
+	<insert id="reply" parameterType="qna">
+		insert into qna values ( qna_no_seq.nextval, #{qna_title},
+		#{product_no}, #{mem_id}, 0, sysdate, #{qna_content},
+		#{qna_file, jdbcType=VARCHAR}, #{qna_secret}, #{qna_ref},
+		#{qna_lev}, #{qna_seq}, '답변', '', '' )
+	</insert>
+	
+	<!-- 답변 레벨 1 증가 -->
+	<update id="replyUp" parameterType="qna">
+		update qna set qna_seq=qna_seq+1
+		where qna_ref=#{qna_ref} and qna_seq > #{qna_seq}
+	</update>
+	
+	<!-- 답변 상태 변경 -->
+	<update id="replyAnswer" parameterType="qna">
+		update qna set qna_answer='답변완료'
+		where qna_no=#{qna_no}
+	</update>
+
+</mapper>

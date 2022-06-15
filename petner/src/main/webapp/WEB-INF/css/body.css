@@ -1,0 +1,47 @@
+.tab {
+	margin: 30px;
+	margin-left: 20px;
+}
+
+#tab1 {
+	width: 500px;
+	margin: 60px auto;
+	
+}
+
+.empty1 {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.empty {
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+.mem {
+	width: 400px;
+}
+
+.mem1 {
+	width: 325px;
+}
+
+#mem_post {
+	width: 300px;
+}
+
+#mem_id {
+	width: 325px;
+}
+
+.position1 {
+	margin-top: 35px;
+}
+
+#sign_up {
+	background-color: #ffa29a;
+	width: 90px;
+	height: 35px;
+	border-radius: 20px;
+}

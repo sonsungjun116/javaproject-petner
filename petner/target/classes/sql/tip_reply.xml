@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tip_replyns">
+
+	<insert id="insertTipreply" parameterType="tipreply">
+		insert into tipreply values(tip_reply_seq.nextval,#{tip_no},#{mem_id},#{tipreply_content},sysdate,0,0,tip_reply_seq.nextval)	
+	</insert>
+	
+	<select id="getTipreplyList" parameterType="int" resultType="tipreply">
+		select * from (select a.*, rowNum rn from (select * from tipreply order by tipreply_ref desc, tipreply_seq asc)a)
+		where tip_no = #{tip_no}
+	</select>
+	
+	<delete id="deleteTipreply" parameterType="int">
+		delete from tipreply where tipreply_no=#{tipreply_no}
+	</delete>
+	
+	<update id="updateTipreply" parameterType="tipreply">
+		update tipreply set tipreply_content = #{tipreply_content}, tipreply_date = sysdate where tipreply_no = #{tipreply_no}
+	</update>
+	
+	<insert id="addreply" parameterType="tipreply">
+		insert into tipreply values(tip_reply_seq.nextval,#{tip_no}, #{mem_id}, #{tipreply_content},sysdate,#{tipreply_seq}, #{tipreply_lev},#{tipreply_ref})
+	</insert>
+	
+	<update id="refEdit" parameterType="tipreply">
+		update tipreply set tipreply_seq = tipreply_seq+1 where tipreply_ref = #{tipreply_ref} and tipreply_seq &gt; #{tipreply_seq}
+	</update>
+</mapper>

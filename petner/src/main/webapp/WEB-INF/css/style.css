@@ -1,0 +1,214 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0px;
+}
+
+.top-header {
+	background-color: #ffa29a;
+	width:100%;
+	height: 50px;
+	line-height: 45px;
+}
+
+.header {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.header h4 {
+	display: inline-block;
+	width: 300px;
+}
+
+.header a {
+	text-decoration: none;
+	color: black;
+	line-height: normal;
+	vertical-align: middle;
+	font-size: 11px;
+	margin: 0px 2px;
+	padding: 2px;
+}
+
+.header a:hover {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.login {
+	display: inline-block;
+	float: right;
+}
+
+.login a {
+	text-decoration: none;
+	color: black;
+	font-size: 11px;
+}
+
+.login a:hover {
+	font-weight: bold;
+	font-size: 12px;	
+}
+
+.main {
+	width: 1100px;
+	margin: 1px auto;
+}
+
+.logo-line{
+	text-align: right;
+}
+
+.logo {
+	display: inline-block;
+	height: 100px;
+	line-height: 100px;
+	float: left;
+}
+
+.logo img {
+	height: 100px;
+	text-align: left;
+	line-height: normal;
+	vertical-align: middle;
+}
+
+.info {
+	display: inline-block;
+	height: 100px;
+	line-height: 90px;
+	
+}
+
+.info a {
+	display: inline-block;
+	vertical-align: middle;
+	text-decoration: none;
+	color: black;
+	font-size: 11px;
+	padding: 0px 10px;
+}
+
+.info:hover, .info a:hover {
+	background: #ffa29a;
+	color:white;	
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.search {
+	margin-top: 50px;
+	height: 53.33px;
+}
+
+.title {
+	display: inline-block;
+	width: 200px;
+}
+
+.title h4, .title h2{
+	margin: 1px 0px 0px 0px;
+}
+
+
+.searchtab{
+	display: inline-block;
+	height: 54px;
+	border: 3px solid #ffa29a;
+	border-radius: 5px;
+}
+
+.searchtab input {
+	height: 48px;
+	vertical-align: text-bottom;
+	width: 700px;
+	border: none;
+}
+
+.button {
+	height: 50px;
+	vertical-align: text-bottom;
+	margin: 0px;
+}
+
+.button img {
+	height: 46px;
+}
+
+span {
+	text-align: center;
+}
+
+span > h2 {
+	margin-top: 60px;
+	margin-bottom: 30px;
+}
+
+p {
+	font-size: 13px;
+	display: inline-block;
+}
+
+.add {
+	font-size: 15px;
+	float: right;
+}
+
+.add a {
+	text-decoration: none;
+	color: black;
+}
+
+.content {
+	display: inline-block;
+	width: 180px;
+	margin: 12px; 	
+}
+
+.content img {
+	width: 180px;
+	height: 180px;
+	border-radius: 10px 10px 0px 0px;
+	margin-bottom: 0px;
+}
+
+.content a {
+	text-decoration: none;
+	color:black;
+	font-size: 13px;
+}
+
+.content:hover {
+	border-radius: 10px;
+	color:black;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.info2{
+	width:500px;
+	display: inline-block;
+	border: 1px solid black;
+	
+}
+
+.info2 ol li a {
+	text-decoration: none;
+	color:black;
+}
+
+.info2 ol li a:hover{
+	color:black;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.info2 ol li{
+	list-style: none;	
+	text-align:center;
+	margin-bottom: 10px
+}

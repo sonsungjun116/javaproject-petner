@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentns">
+
+	<insert id="insert" parameterType="payment">
+
+		insert into payment values (payment_seq.nextval,sysdate,#{order_no},
+		#{mem_id},#{mem_post},#{mem_addr1},#{mem_addr2},#{payment_price},#{payment_step},sysdate,#{product_no},#{product_ea},#{product_name},#{seller_no})
+	</insert>
+
+
+	<select id="max" resultType="int">
+
+		select max(payment_no) from payment
+
+	</select>
+
+	<select id="getPayment" parameterType="int" resultType="payment">
+		select *
+		from payment where payment_no=#{payment_no}
+	</select>
+
+	<select id="list" parameterType="String" resultType="payment">	<!-- 컬럼이 같기 때문에 resultType="board"도 가능 -->
+
+		select * from payment where mem_id = #{mem_id}
+
+	</select>
+
+	<select id="getTotal" parameterType="order_product"
+		resultType="int">
+		select count(*) from order_product
+	</select>
+</mapper>

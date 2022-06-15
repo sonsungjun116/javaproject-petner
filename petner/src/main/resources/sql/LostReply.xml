@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lostreplyns">
+	
+	<insert id="insert" parameterType="lostreply">
+	
+		insert into lostreply values (lostreply_seq.nextval,#{lost_no},#{mem_id},
+			#{lostreply_content},sysdate,0,0,lostreply_seq.nextval)
+	
+	</insert>
+	
+	<!-- 컬럼이 같기 때문에 resultType="board"도 가능  -->
+	<select id="list" parameterType="int" resultType="lostreply">	
+		
+		select * from 
+		 (select rownum rnum, lostreply.* from  
+	  	 (select * from lostreply where lost_no=#{lost_no} order by lostreply_ref desc,lostreply_seq asc) lostreply) 
+								
+	</select>
+	
+	<update id="update" parameterType="lostreply">
+		update lostreply set lostreply_content=#{lostreply_content},
+			lostreply_date=sysdate where lostreply_no=#{lostreply_no} 
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from lostreply where lostreply_no=#{lostreply_no}
+	</delete>
+	
+	<!-- 답변글 레벨 증가 -->
+	<update id="lostreply_Level" parameterType="lostreply">
+		update lostreply set
+		lostreply_seq=lostreply_seq+1
+		where lostreply_ref=#{lostreply_ref} and
+		      lostreply_seq &gt; #{lostreply_seq} <!-- 부모보다 seq값이 큰 댓글들 -->
+	</update>
+
+	<!-- 답변글 저장 -->
+	<insert id="lostreply_reply" parameterType="lostreply">
+	
+		<selectKey keyProperty="lostreply_seq" order="BEFORE" resultType="int">
+			select max(lostreply_seq) + 1 from lostreply where lostreply_ref=#{lostreply_ref}
+		</selectKey>	
+		insert into lostreply values (lostreply_seq.nextval,#{lost_no},#{mem_id},
+			#{lostreply_content},sysdate,#{lostreply_seq},#{lostreply_lev},#{lostreply_ref})
+			
+	</insert>
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tip_boardns">
+
+	<insert id="insertTip" parameterType="tipboard">
+		insert into tipboard
+		values(tip_board_seq.nextval,#{tip_title},#{mem_id},
+		0,sysdate,#{tip_content},#{tip_file, jdbcType=VARCHAR},#{tip_pet})
+	</insert>
+
+
+	<select id="getTotal" parameterType="tipboard" resultType="int">
+		select count(*) from tipboard
+		<where>	<!-- 동적 sql문(Dynamic sql문) -->
+			<if test="keyword != null and search != null">
+				${search} like '%'||#{keyword}||'%'	<!-- ${search}는 가변형으로 ${search}의 변수이름이 
+					변형이된다. -->
+			</if>
+		</where>
+	</select>
+
+	<select id="list" parameterType="tipboard" resultType="tipboard">
+		select * from (select rowNum rn, tip.* from( select * from tipboard
+		<where>
+			<if test="keyword != null and search!= null">
+				${search} like '%'||#{keyword}||'%'
+			</if>
+		</where>
+		order by tip_regdate desc) tip )
+		where rn between #{startRow} and
+		#{endRow}
+	</select>
+	
+	<select id="getTip" parameterType="int" resultType="tipboard">
+		select * from tipboard where tip_no=#{tip_no}
+	</select>
+	
+	<update id="updatetip_readcount" parameterType="int">
+		update tipboard set tip_readcount = tip_readcount + 1 where tip_no = #{tip_no} 
+	</update>
+	
+	<update id="updateTip" parameterType="tipboard">
+		update tipboard set tip_title = #{tip_title}, tip_content = #{tip_content},
+							tip_file = #{tip_file, jdbcType=VARCHAR}, tip_pet=#{tip_pet} where tip_no = #{tip_no}
+	</update>
+	
+	<delete id="deleteTip" parameterType="int">
+		delete from tipboard where tip_no=#{tip_no}
+	</delete>
+</mapper>

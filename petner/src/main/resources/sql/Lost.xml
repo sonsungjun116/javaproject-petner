@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lostns">
+	
+	  <select id="list" parameterType="lost" resultType="lost">	<!-- 컬럼이 같기 때문에 resultType="board"도 가능  -->
+		select * from (select a.*,rowNum rn from (
+			select * from lost
+		<where>															<!-- where절은 검색어가 있을때만 돌아감 -->
+			<if test="keyword != null and search!='subcon'">
+				${search} like '%'||#{keyword}||'%'						<!-- 계속해서 바뀌는 내용이기 때문에 ${}를 쓴다 -->
+			</if>
+			<if test="keyword != null and search=='subcon'">
+				lost_title like '%'||#{keyword}||'%' or
+				lost_content like '%'||#{keyword}||'%'
+			</if>
+		</where>			
+			 order by lost_no desc) a )
+			where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getTotal" parameterType="lost" resultType="int">
+		select count(*) from lost 						<!-- board값이 없다면 where절을 제외 하고 실행한다 -->
+		<where>
+			<if test="keyword != null and search !='subcon'">
+				${search} like '%'||#{keyword}||'%'
+			</if>
+			<if test="keyword != null and search=='subcon'">
+				lost_title like '%'||#{keyword}||'%' or
+				lost_content like '%'||#{keyword}||'%'
+			</if>
+		</where>
+	</select>
+	
+	<update id="selectUpdate" parameterType="int">
+		update lost set lost_readcount = lost_readcount+1 where lost_no=#{num}
+	</update>
+	
+	<select id="select" parameterType="int" resultType="lost">
+		select * from lost where lost_no=#{num}
+	</select>  
+	
+	<insert id="insert" parameterType="lost">
+	
+		insert into lost values (lost_seq.nextval,#{lost_title},0,
+			sysdate,#{lost_content},#{lost_file, jdbcType=VARCHAR},#{mem_id},'n',#{lost_pwd},#{lat},#{lng})
+	</insert>
+	
+	<update id="update" parameterType="lost">
+		update lost set lost_title=#{lost_title},lost_content=#{lost_content},
+			lost_file=#{lost_file, jdbcType=VARCHAR},lat=#{lat},lng=#{lng} where lost_no=#{lost_no}
+	</update>
+	
+	<update id="delete" parameterType="int">
+		update lost set lost_del='y' where lost_no=#{lost_no}
+	</update>
+	
+</mapper>

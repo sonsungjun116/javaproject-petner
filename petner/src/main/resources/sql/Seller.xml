@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sellerns">
+
+   
+   
+   <insert id="insert" parameterType="seller">
+   
+      insert into seller values (seller_seq.nextval,
+               #{seller_name},#{seller_post},#{seller_addr1},#{seller_addr2},#{seller_tel1},#{seller_tel2},
+               #{seller_tel3},#{mem_id},0)
+   </insert>
+   <!-- #{join_profile, jdbcType=VARCHAR} seller_accept의 default값은 0이고 관리자가 승인을 한다면 1로 변환 -->
+   
+   <select id="sellerList" resultType="seller">
+      select * from seller
+   </select>
+   
+   <update id="update_seller_accept" parameterType="int">
+      update seller set seller_accept = 1 where seller_no = #{seller_no}   
+   </update>
+   
+   <select id="select" parameterType="int" resultType="seller">
+      select * from seller where seller_no = #{seller_no}
+   </select>
+</mapper>

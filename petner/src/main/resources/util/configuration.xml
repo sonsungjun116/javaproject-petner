@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="member" type="petner.model.Member" />
+		<typeAlias alias="tipboard" type="petner.model.Tipboard" />
+		<typeAlias alias="tipreply" type="petner.model.Tipreply" />
+		<typeAlias alias="basket" type="petner.model.Basket" />
+		<typeAlias alias="tiplike" type="petner.model.Tiplike" />
+		<typeAlias alias="product" type="petner.model.Product" />
+		<typeAlias alias="review" type="petner.model.Review"/>
+		<typeAlias alias="seller" type="petner.model.Seller" />
+		<typeAlias alias="lost" type="petner.model.Lost" />
+		<typeAlias alias="lostreply" type="petner.model.LostReply" />
+		<typeAlias alias="payment" type="petner.model.Payment" />
+		<typeAlias alias="qna" type="petner.model.Qna" />
+		<typeAlias alias="hospital" type="petner.model.Hospital" />
+		<typeAlias alias="admin" type="petner.model.Admin" />
+		<typeAlias alias="order_product" type="petner.model.Order_product" />
+
+	</typeAliases>
+	<!-- <mappers> <mapper resource="Board.xml" /> <mapper resource="ReplyBoard.xml" 
+		/> </mappers> -->
+</configuration>

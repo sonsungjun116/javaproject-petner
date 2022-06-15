@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewns">
+
+	<select id="getTotal" parameterType="review" resultType="int">
+		select count(*) from review where review_del='n'
+	</select>
+	
+	<select id="list" parameterType="review" resultType="review">
+		select * from (select rownum rn, review.* from review where review_del='n' order by review_no desc) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getNototal" parameterType="review" resultType="int">
+		select count(*) from review where review_del='n' and product_no=#{product_no}
+	</select>
+
+	<select id="nolist" parameterType="review" resultType="review">
+		select * from (select rownum rn, review.* from review where review_del='n' and product_no=#{product_no} 
+		order by review_no desc) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<insert id="insert" parameterType="review">
+		insert into review values (review_no_seq.nextval, #{review_title}, #{product_no}, sysdate, 
+		#{review_content}, #{review_file, jdbcType=VARCHAR}, #{review_like}, 'n', #{mem_id}, #{mem_name})
+	</insert>
+	
+	<select id="getReview" parameterType="int" resultType="review">
+		select * from review where review_no=#{review_no}
+	</select>
+	
+	<update id="update" parameterType="review">
+		update review set review_title=#{review_title}, review_date=sysdate, review_content=#{review_content}, 
+		review_file=#{review_file, jdbcType=VARCHAR}, review_like=#{review_like}
+	</update>
+	
+	<update id="delete" parameterType="int">
+		update review set product_del='y' where review_no=#{review_no}
+	</update>
+</mapper>
